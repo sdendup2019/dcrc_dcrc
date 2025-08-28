@@ -179,45 +179,4 @@ AND    m.cid_number=:cid</sql>
             <with-param name="cid" query-param="cid"/>
         </call-query>
     </resource>
-    <query id="getWorkflowDetailsQuery" useConfig="Citizen_DS">
-        <sql>SELECT 
-    c.Status_Name, 
-    c.Status_Type_Short_Desc, 
-    DATE_FORMAT(a.Action_Date, '%d-%m-%Y %H:%i:%s') AS timeOfDeath, 
-    a.Role_Name, 
-    CONCAT(a.Actor_Name, " ", "(", a.Role_Name, ")") AS actorName, 
-    a.Service_Id AS requestServiceID, 
-    (CASE WHEN a.WF_Remarks IS NULL THEN "" ELSE a.WF_Remarks END) AS remarks 
-FROM t_workflow_dtls a, t_status_lookup c 
-WHERE a.Application_Number = :applicationNumber 
-    AND a.Status_Id = c.Status_Id 
-UNION 
-SELECT 
-    d.Status_Name, 
-    d.Status_Type_Short_Desc, 
-    DATE_FORMAT(b.Action_Date, '%d-%m-%Y %H:%i:%s') AS timeOfDeath, 
-    b.Role_Name, 
-    CONCAT(b.Actor_Name, " ", "(", b.Role_Name, ")") AS actorName, 
-    b.Service_Id AS requestServiceID, 
-    (CASE WHEN b.WF_Remarks IS NULL THEN "" ELSE b.WF_Remarks END) AS remarks 
-FROM t_workflow_dtls_audit b, t_status_lookup d 
-WHERE b.Application_Number = :applicationNumber 
-    AND b.Status_Id = d.Status_Id 
-ORDER BY timeOfDeath DESC</sql>
-        <result element="workflowDetailsResponse" rowName="workflowDetail">
-            <element column="Status_Name" name="statusName" xsdType="xs:string"/>
-            <element column="Status_Type_Short_Desc" name="statusTypeShortDesc" xsdType="xs:string"/>
-            <element column="timeOfDeath" name="actionDateTime" xsdType="xs:string"/>
-            <element column="Role_Name" name="roleName" xsdType="xs:string"/>
-            <element column="actorName" name="actorName" xsdType="xs:string"/>
-            <element column="requestServiceID" name="serviceId" xsdType="xs:string"/>
-            <element column="remarks" name="remarks" xsdType="xs:string"/>
-        </result>
-        <param name="applicationNumber" sqlType="STRING"/>
-    </query>
-    <resource method="GET" path="workflowdetails">
-        <call-query href="getWorkflowDetailsQuery">
-            <with-param name="applicationNumber" query-param="applicationNumber"/>
-        </call-query>
-    </resource>
 </data>
