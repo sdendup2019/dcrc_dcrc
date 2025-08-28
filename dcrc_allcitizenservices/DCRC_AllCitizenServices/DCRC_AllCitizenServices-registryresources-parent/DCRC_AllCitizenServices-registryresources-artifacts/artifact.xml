@@ -27,4 +27,11 @@
             <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
         </item>
     </artifact>
+    <artifact name="DCRC_AllCitizenServices_getWorkflowDetails_dataservice_endpoint_1.0.0" groupId="bt.gov.dcrc.resource" version="1.0.0" type="registry/resource" serverRole="GovernanceRegistry">
+        <item>
+            <file>DCRC_AllCitizenServices_getWorkflowDetails_dataservice_endpoint_1.0.0.xml</file>
+            <path>/_system/governance/datahub/dcrc/endpoints</path>
+            <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+        </item>
+    </artifact>
 </artifacts>
