@@ -40,4 +40,14 @@
             </send>
         </inSequence>
     </resource>
+    <resource faultSequence="datahub_common_error_handler_sequence_1.0.0" methods="GET" outSequence="datahub_common_out_sequence_1.0.0" uri-template="/workflowdetails/{applicationNumber}">
+        <inSequence>
+            <header action="remove" name="Content-Type" scope="transport"/>
+            <header name="Accept" scope="transport" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <send>
+                <endpoint key="gov:datahub/dcrc/endpoints/DCRC_AllCitizenDetailsService_getWorkflowDetails_dataservice_endpoint_1.0.0.xml"/>
+            </send>
+        </inSequence>
+    </resource>
 </api>
