@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<endpoint name="DCRC_AllCitizenServices_getWorkflowDetails_dataservice_endpoint_1.0.0" xmlns="http://ws.apache.org/ns/synapse">
-    <http method="get" uri-template="http://localhost:8290/services/DCRC_AllCitizenServices_1.0.0.SecureHTTPEndpoint/workflowdetails?applicationNumber={uri.var.applicationNumber}">
-        <timeout>
-            <duration>10000</duration>
-            <responseAction>fault</responseAction>
-        </timeout>
-    </http>
-</endpoint>
