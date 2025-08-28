@@ -1,0 +1,182 @@
+<data name="DCRC_AllCitizenServices_1.0.0" serviceGroup="DCRC_AllCitizenServices_1.0.0" serviceNamespace="http://allcitizenservices.dcrc.gov.bt">
+    <description/>
+    <config id="Citizen_DS">
+        <property name="carbon_datasource_name">Citizen_DS</property>
+    </config>
+    <query id="getAllCitizenDetailsQuery" useConfig="Citizen_DS">
+        <sql>SELECT     
+	v.cid_number,
+	d.Nationality,
+	Date_format(m.first_issued_date, '%d/%m/%Y' ) AS First_Issued_Date,
+	Date_format( d.last_cid_issue_date, '%d/%m/%Y' )  AS Cid_Issued_Date,
+	Date_format( d.last_cid_expiry_date, '%d/%m/%Y' ) AS Cid_Expiry_Date,
+    DATE_FORMAT(m.DOB, '%d/%m/%Y' ) AS DOB,	Concat(Ifnull(v.father_first_name, ''), ' ', Ifnull(v.father_middle_name, ''), ' ', Ifnull(v.father_last_name, '')) AS fatherName,
+	m.first_name,
+	m.middle_name,
+	m.last_name,
+	m.Gender,
+	m.Person_Status,
+	
+	d.Date_Of_Death,
+	m.mobile_number,
+	Concat(Ifnull(v.mother_first_name, ''), ' ', Ifnull(v.mother_middle_name, ''),
+	 ' ', Ifnull(v.mother_last_name, '')) AS motherName,
+	v.Occupation_Desc,
+	z.Dzongkhag_Name,
+	z.Dzongkhag_Serial_No,
+	z.Dzongkhag_Name,
+    z.Dzongkhag_Name_Bh,
+                g.Gewog_Serial_No,
+                g.Gewog_Name,
+                g.Gewog_Name_Bh,
+                v.Permanent_House_No,
+                v.Permanent_Thram_No,
+                d.Permanent_Village_Serial_No,
+                v.Permanent_Village_Name,
+  k.Village_Name_Bh,
+              d.Place_Of_Birth,
+                c.Country_Name,
+                m.Present_Household_No,
+                m.First_Name_Bh,
+                m.Middle_Name_Bh,
+                m.Last_Name_Bh
+FROM            v_citizen_detail v,
+				
+                t_citizen_master m,
+                t_citizen_dtls d
+          
+LEFT OUTER JOIN t_country_master c
+ON              d.nationality = c.country_id
+LEFT OUTER JOIN (t_village_lookup k,t_gewog_lookup g,t_dzongkhag_lookup z)
+ON              (
+                                d.permanent_village_serial_no = k.village_serial_no
+                AND             k.gewog_serial_no = g.gewog_serial_no
+                AND             g.dzongkhag_serial_no = z.dzongkhag_serial_no)
+WHERE           m.cid_number = d.cid_number
+AND             v.cid_number = m.cid_number
+
+AND             m.cid_number=:cid</sql>
+        <result element="allCitizenDetailsResponse" rowName="allCitizenDetail">
+            <element column="CID_Number" name="cid" xsdType="xs:string"/>
+            <element column="Country_Name" name="country" xsdType="xs:string"/>
+            <element column="DOB" name="dob" xsdType="xs:date"/>
+            <element column="fatherName" name="fatherName" xsdType="xs:string"/>
+            <element column="First_Issued_Date" name="First_Issued_Date" xsdType="xs:date"/>
+            <element column="first_name" name="firstName" xsdType="xs:string"/>
+            <element column="Gender" name="gender" xsdType="xs:string"/>
+            <element column="Present_HouseHold_No" name="householdNo" xsdType="xs:string"/>
+            <element column="last_name" name="lastName" xsdType="xs:string"/>
+            <element column="middle_name" name="middleName" xsdType="xs:string"/>
+            <element column="mobile_number" name="mobileNumber" xsdType="xs:string"/>
+            <element column="motherName" name="motherName" xsdType="xs:string"/>
+            <element column="Occupation_Desc" name="occupation" xsdType="xs:string"/>
+            <element column="Dzongkhag_Serial_No" name="dzongkhagId" xsdType="xs:integer"/>
+            <element column="Dzongkhag_Name" name="dzongkhagName" xsdType="xs:string"/>
+            <element column="Dzongkhag_Name_Bh" name="dzongkhagDzoName" xsdType="xs:string"/>
+            <element column="Gewog_Serial_No" name="gewogId" xsdType="xs:integer"/>
+            <element column="Gewog_Name" name="gewogName" xsdType="xs:string"/>
+            <element column="Gewog_Name_Bh" name="geogDzoName" xsdType="xs:string"/>
+            <element column="Permanent_House_No" name="houseNo" xsdType="xs:string"/>
+            <element column="Permanent_Thram_No" name="thramNo" xsdType="xs:string"/>
+            <element column="Permanent_Village_Serial_No" name="villageSerialNo" xsdType="xs:integer"/>
+            <element column="Permanent_Village_Name" name="villageName" xsdType="xs:string"/>
+            <element column="Village_Name_Bh" name="villageDzoName" xsdType="xs:string"/>
+            <element column="Place_Of_Birth" name="placeOfBirth" xsdType="xs:string"/>
+            <element column="First_Name_Bh" name="firstDzoName" xsdType="xs:string"/>
+            <element column="Middle_Name_Bh" name="middleDzoName" xsdType="xs:string"/>
+            <element column="Last_Name_Bh" name="lastDzoName" xsdType="xs:string"/>
+            <element column="Person_Status" name="Status" xsdType="xs:string"/>
+            <element column="Nationality" name="nationality" xsdType="xs:string"/>
+            <element column="Cid_Issued_Date" name="cid_issued_date" xsdType="xs:date"/>
+            <element column="Cid_Expiry_Date" name="cid_expiry_date" xsdType="xs:date"/>
+           
+            <element column="Date_Of_Death" name="date_of_death" xsdType="xs:date"/>
+        </result>
+        <param name="cid" sqlType="STRING"/>
+    </query>
+    <resource method="GET" path="allcitizendetails">
+        <call-query href="getAllCitizenDetailsQuery">
+            <with-param name="cid" query-param="cid"/>
+        </call-query>
+    </resource>
+    <query id="getParentDetailQuery" useConfig="Citizen_DS">
+        <sql>SELECT  c.Father_CID_No,
+
+DATE_FORMAT(c1.DOB, '%d/%m/%Y') as Fathers_dob,
+(IFNULL(c.Father_First_Name, '')) as fatherFirstName,
+(IFNULL(c.Father_Middle_Name, '')) as fatherMiddleName,
+(IFNULL(c.Father_Last_Name, '')) AS fatherLastName
+,
+c.Mother_CID_No,
+
+DATE_FORMAT(c2.DOB, '%d/%m/%Y') as Mothers_dob,
+(IFNULL(c.Mother_First_Name, '')) as motherFirstName,
+(IFNULL(c.Mother_Middle_Name, '')) as motherMiddleName,
+(IFNULL(c.Mother_Last_Name, '')) AS motherLastName
+FROM v_citizen_detail c
+
+left outer join v_citizen_detail c1 on c1.CID_Number = c.Father_CID_No
+left outer join v_citizen_detail c2 on c2.CID_Number = c.Mother_CID_No
+
+
+WHERE c.CID_Number=:cid</sql>
+        <result element="parentdetails" rowName="parentdetail">
+            <element column="Father_CID_No" name="fatherCID" xsdType="xs:string"/>
+            <element column="Fathers_dob" name="fatherDoB" xsdType="xs:date"/>
+            <element column="fatherFirstName" name="fatherFirstName" xsdType="xs:string"/>
+            <element column="fatherMiddleName" name="fatherMiddleName" xsdType="xs:string"/>
+            <element column="fatherLastName" name="fatherLastName" xsdType="xs:string"/>
+            <element column="Mother_CID_No" name="motherCID" xsdType="xs:string"/>
+            <element column="Mothers_dob" name="motherDoB" xsdType="xs:date"/>
+            <element column="motherFirstName" name="motherFirstName" xsdType="xs:string"/>
+            <element column="motherMiddleName" name="motherMiddleName" xsdType="xs:string"/>
+            <element column="motherLastName" name="motherLastName" xsdType="xs:string"/>
+        </result>
+        <param name="cid" sqlType="STRING"/>
+    </query>
+    <resource method="GET" path="parentdetails">
+        <call-query href="getParentDetailQuery">
+            <with-param name="cid" query-param="cid"/>
+        </call-query>
+    </resource>
+    <query id="getHealthCheckQuery" useConfig="Citizen_DS">
+        <sql>SELECT 1 as healthCheck</sql>
+        <result element="healthCheck" rowName="result">
+            <element column="healthCheck" name="healthCheck"/>
+        </result>
+    </query>
+    <resource method="GET" path="healthcheck">
+        <call-query href="getHealthCheckQuery"/>
+    </resource>
+    <query id="getCitizenDetailQuery" useConfig="Citizen_DS">
+        <sql>SELECT       
+v.cid_number,
+	m.first_name,
+	m.middle_name,
+	m.last_name,
+	m.Gender
+ 
+FROM            
+                
+ v_citizen_detail v,
+                
+t_citizen_master m
+
+where   v.cid_number = m.cid_number
+
+AND    m.cid_number=:cid</sql>
+        <result element="citizendetails" rowName="citizendetail">
+            <element column="CID_Number" name="cid" xsdType="xs:string"/>
+            <element column="first_name" name="firstName" xsdType="xs:string"/>
+            <element column="middle_name" name="middleName" xsdType="xs:string"/>
+            <element column="last_name" name="lastName" xsdType="xs:string"/>
+            <element column="Gender" name="gender" xsdType="xs:string"/>
+        </result>
+        <param name="cid" sqlType="STRING"/>
+    </query>
+    <resource method="GET" path="citizendetail">
+        <call-query href="getCitizenDetailQuery">
+            <with-param name="cid" query-param="cid"/>
+        </call-query>
+    </resource>
+</data>

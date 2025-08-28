@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><resource name="DCRC_AllCitizenDetailsService_getCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml" isCollection="false" path="/_system/governance/datahub/dcrc/endpoints/DCRC_AllCitizenServices-registryresources-artifacts/DCRC_AllCitizenDetailsService_getCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml" registryUrl="https://localhost:9443/registry" status="added">
+    <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+</resource>

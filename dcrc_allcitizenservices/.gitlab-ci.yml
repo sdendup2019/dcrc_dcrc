@@ -1,0 +1,88 @@
+image: hub.neyduetewa.gov.bt/datahub/datahub-maven:3.6-jdk-8
+
+stages:
+  - build_stg
+  - deploy_stg
+  - build_prod
+  - deploy_prod
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=/builds/datahub/.m2/repository"
+  DSS_CAPP: "DCRC_AllCitizenServices/DCRC_AllCitizenServices-dataservice-parent/DCRC_AllCitizenServices-dataservice-capp-project/target/DCRC_AllCitizenServices-dataservice-capp-project_1.0.0.car"
+  REGISTRY_CAPP: "DCRC_AllCitizenServices/DCRC_AllCitizenServices-registryresources-parent/DCRC_AllCitizenServices-registryresources-capp/target/DCRC_AllCitizenServices-registryresources-capp_1.0.0.car"
+  EI_CAPP: "DCRC_AllCitizenServices/DCRC_AllCitizenServices-synapse-artifacts-parent/DCRC_AllCitizenServices-synapse-artifacts-capp/target/DCRC_AllCitizenServices-synapse-artifacts-capp_1.0.0.car"
+
+
+build_stg:
+  stage: build_stg
+  only:
+    - master
+  tags:
+    - ditt
+  variables:
+    DSS_HOST: "$DATAHUB_STG_DSS_HOST"
+  script:
+    - mvn $MAVEN_CLI_OPTS -f DCRC_AllCitizenServices/pom.xml install
+  artifacts:
+    paths:
+      - $DSS_CAPP
+      - $REGISTRY_CAPP
+      - $EI_CAPP
+
+deploy_stg:
+  stage: deploy_stg
+  only:
+    - master
+  tags:
+    - ditt
+  environment:
+    name: stg
+  script:
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $DSS_CAPP $DATAHUB_STG_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $REGISTRY_CAPP $DATAHUB_STG_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $EI_CAPP $DATAHUB_STG_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $DSS_CAPP $DATAHUB_NEW_STG_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $REGISTRY_CAPP $DATAHUB_NEW_STG_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_STG_CAPP_CREDENTIALS" -T  $EI_CAPP $DATAHUB_NEW_STG_CAPP_LOCATION -v
+  when: manual
+  dependencies:
+     - build_stg
+
+
+
+build_prod:
+  stage: build_prod
+  only:
+    - master
+  tags:
+    - ditt
+  variables:
+    DSS_HOST: "$DATAHUB_PROD_DSS_HOST"
+  script:
+    - mvn $MAVEN_CLI_OPTS -f DCRC_AllCitizenServices/pom.xml install
+  artifacts:
+    paths:
+      - $DSS_CAPP
+      - $REGISTRY_CAPP
+      - $EI_CAPP
+ 
+
+deploy_prod:
+  stage: deploy_prod
+  only:
+    - master
+  tags:
+    - ditt
+  environment:
+    name: prod
+  script:
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $DSS_CAPP $DATAHUB_PROD_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $REGISTRY_CAPP $DATAHUB_PROD_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $EI_CAPP $DATAHUB_PROD_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $DSS_CAPP $DATAHUB_NEW_PROD_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $REGISTRY_CAPP $DATAHUB_NEW_PROD_CAPP_LOCATION -v
+     - curl -k -u "$DATAHUB_PROD_CAPP_CREDENTIALS" -T  $EI_CAPP $DATAHUB_NEW_PROD_CAPP_LOCATION -v
+  when: manual
+  dependencies:
+     - build_prod

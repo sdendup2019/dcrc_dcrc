@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="DCRC_AllCitizenServices_healthcheck_dataservice_endpoint_1.0.0" groupId="bt.gov.dcrc.resource" version="1.0.0" type="registry/resource" serverRole="GovernanceRegistry">
+        <item>
+            <file>DCRC_AllCitizenServices_healthcheck_dataservice_endpoint_1.0.0.xml</file>
+            <path>/_system/governance/datahub/dcrc/enpoints</path>
+            <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+        </item>
+    </artifact>
+    <artifact name="DCRC_AllCitizenDetailsService_getParentDetailsByCid_dataservice_endpoint_1.0.0" groupId="bt.gov.dcrc.resource" version="1.0.0" type="registry/resource" serverRole="GovernanceRegistry">
+        <item>
+            <file>DCRC_AllCitizenDetailsService_getParentDetailsByCid_dataservice_endpoint_1.0.0.xml</file>
+            <path>/_system/governance/datahub/dcrc/endpoints</path>
+            <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+        </item>
+    </artifact>
+    <artifact name="DCRC_AllCitizenDetailsService_getAllCitizenDetailsByCid_dataservice_endpoint_1.0.0" groupId="bt.gov.dcrc.resource" version="1.0.0" type="registry/resource" serverRole="GovernanceRegistry">
+        <item>
+            <file>DCRC_AllCitizenDetailsService_getAllCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml</file>
+            <path>/_system/governance/datahub/dcrc/endpoints</path>
+            <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+        </item>
+    </artifact>
+    <artifact name="DCRC_AllCitizenDetailsService_getCitizenDetailsByCid_dataservice_endpoint_1.0.0" groupId="bt.gov.dcrc.resource" version="1.0.0" type="registry/resource" serverRole="GovernanceRegistry">
+        <item>
+            <file>DCRC_AllCitizenDetailsService_getCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml</file>
+            <path>/_system/governance/datahub/dcrc/endpoints</path>
+            <mediaType>application/vnd.wso2.esb.endpoint</mediaType>
+        </item>
+    </artifact>
+</artifacts>

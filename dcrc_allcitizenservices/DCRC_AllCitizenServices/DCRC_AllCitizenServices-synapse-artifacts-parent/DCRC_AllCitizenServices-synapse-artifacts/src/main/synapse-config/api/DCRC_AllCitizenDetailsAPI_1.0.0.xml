@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/dcrc_allcitizendetailsapi_1.0.0" name="DCRC_AllCitizenDetailsAPI_1.0.0" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="datahub_common_error_handler_sequence_1.0.0" methods="GET" outSequence="datahub_common_out_sequence_1.0.0" uri-template="/allcitizendetails/{cid}">
+        <inSequence>
+            <header action="remove" name="Content-Type" scope="transport"/>
+            <header name="Accept" scope="transport" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <send>
+                <endpoint key="gov:datahub/dcrc/endpoints/DCRC_AllCitizenDetailsService_getAllCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml"/>
+            </send>
+        </inSequence>
+    </resource>
+    <resource faultSequence="datahub_common_error_handler_sequence_1.0.0" methods="GET" outSequence="datahub_common_out_sequence_1.0.0" uri-template="/parentdetails/{cid}">
+        <inSequence>
+            <header action="remove" name="Content-Type" scope="transport"/>
+            <header name="Accept" scope="transport" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <send>
+                <endpoint key="gov:datahub/dcrc/endpoints/DCRC_AllCitizenDetailsService_getParentDetailsByCid_dataservice_endpoint_1.0.0.xml"/>
+            </send>
+        </inSequence>
+    </resource>
+    <resource faultSequence="datahub_common_error_handler_sequence_1.0.0" methods="GET" outSequence="datahub_common_out_sequence_1.0.0" uri-template="/citizendetail/{cid}">
+        <inSequence>
+            <header action="remove" name="Content-Type" scope="transport"/>
+            <header name="Accept" scope="transport" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <send>
+                <endpoint key="gov:datahub/dcrc/endpoints/DCRC_AllCitizenDetailsService_getCitizenDetailsByCid_dataservice_endpoint_1.0.0.xml"/>
+            </send>
+        </inSequence>
+    </resource>
+    <resource faultSequence="datahub_common_error_handler_sequence_1.0.0" methods="GET" outSequence="datahub_common_out_sequence_1.0.0" uri-template="/healthcheck">
+        <inSequence>
+            <header action="remove" name="Content-Type" scope="transport"/>
+            <header name="Accept" scope="transport" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <send>
+                <endpoint key="gov:datahub/dcrc/enpoints/DCRC_AllCitizenServices_healthcheck_dataservice_endpoint_1.0.0.xml"/>
+            </send>
+        </inSequence>
+    </resource>
+</api>
