@@ -36,7 +36,7 @@
             <header name="Accept" scope="transport" value="application/json"/>
             <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
             <send>
-                <endpoint key="gov:datahub/dcrc/enpoints/DCRC_AllCitizenServices_healthcheck_dataservice_endpoint_1.0.0.xml"/>
+                <endpoint key="gov:datahub/dcrc/endpoints/DCRC_AllCitizenServices_healthcheck_dataservice_endpoint_1.0.0.xml"/>
             </send>
         </inSequence>
     </resource>
